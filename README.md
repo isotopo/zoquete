@@ -6,12 +6,19 @@ Zoquete is a library that wraps a socket connection with tls.
 ![Zoquete](./zoquete-logo.jpg)
 
 
+Install
+
+```shell
+npm install zoquete --save
+```
+
+
 Example: Ping-pong 
 
 **Server:**
 
 ```js
-    var Zoquete = require('../lib/zoquete'),
+    var Zoquete = require('zoquete'),
     options = {
         key: 'my-key.key',
         cert: 'my-cert.cert',
@@ -33,7 +40,7 @@ Example: Ping-pong
 **Client:**
 
 ```js
-    var Zoquete = require('../lib/zoquete'),
+    var Zoquete = require('zoquete'),
     options = {
         host: 'localhost', // Server tls host
         port: 8080 // Server tls port 
