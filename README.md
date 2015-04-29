@@ -1,5 +1,7 @@
 # Zoquete
 
+[![Join the chat at https://gitter.im/4yopping/zoquete](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/4yopping/zoquete?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Zoquete is a library that wraps a socket connection with tls.
 
 
