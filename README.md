@@ -2,6 +2,9 @@
 
 Zoquete is a library that wraps a socket connection with tls.
 
+[![Build Status](https://travis-ci.org/4yopping/zoquete.svg?branch=master)](https://travis-ci.org/4yopping/zoquete)
+[![npm version](https://badge.fury.io/js/engine.io.svg)](http://badge.fury.io/js/engine.io)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/4yopping/zoquete?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
 
 ![Zoquete](./zoquete-logo.jpg)
 

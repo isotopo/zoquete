@@ -4,7 +4,7 @@
 	"description": "Zoquete is a library that wraps a socket connection with tls.",
 	"main": "index.js",
 	"scripts": {
-		"test": "node test/server & node test/client"
+		
 	},
 	"repository": {
 		"type": "git",
