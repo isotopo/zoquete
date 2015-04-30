@@ -1,27 +1,25 @@
 {
-	"name": "zoquete",
-	"version": "0.0.1",
-	"description": "Zoquete is a library that wraps a socket connection with tls.",
-	"main": "index.js",
-	"scripts": {
-		
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/4yopping/zoquete"
-	},
-	"keywords": [
-		"4yopping",
-		"papi",
-		"socket",
-		"socket server to server",
-		"tls",
-		"tls socket"
-	],
-	"author": "serchserch <smp@4yopping.com>",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/4yopping/zoquete/issues"
-	},
-	"homepage": "https://github.com/4yopping/zoquete"
+  "name": "zoquete",
+  "version": "0.0.2",
+  "description": "Zoquete is a library that wraps a socket connection with tls.",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/4yopping/zoquete"
+  },
+  "keywords": [
+    "4yopping",
+    "papi",
+    "socket",
+    "socket server to server",
+    "tls",
+    "tls socket"
+  ],
+  "author": "serchserch <smp@4yopping.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/4yopping/zoquete/issues"
+  },
+  "homepage": "https://github.com/4yopping/zoquete"
 }
