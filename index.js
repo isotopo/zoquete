@@ -17,6 +17,9 @@
 
  function Zoquete(options) {
      this.options = options;
+     this.setMaxListeners(0);
+     this.isServer = false;
+     this.isClient = false;
  }
 
 
@@ -40,15 +43,10 @@
  Zoquete.prototype.server = function(callback) {
      var self = this;
      this.server = tls.createServer(this.options, function(socket) {
-         self._socket = socket;
-         self._socket.setEncoding('utf8');
+         self.removeAllListeners();
+         self._resetSocket(socket);
          self._socket.pipe(self._socket);
-         self._wrapondata();
-         self._socket.on('error', function(e) {
-             console.log('on error');
-             console.log(e);
-         });
-
+         self.isServer = true;
          if (typeof callback === 'function') {
              callback();
          }
@@ -61,24 +59,48 @@
 
  /**
   *
+  * Reset socket, remove all listeners, assign socket
+  * set encoding and add default listeners
+  *
+  * @param {Object} socket - Socket
+  *
+  * @returns {Object}
+  *
+  */
+ Zoquete.prototype._resetSocket = function(socket) {
+     this._socket = socket;
+     this._socket.setEncoding('utf8');
+     this._wrapondata();
+     this._socket.on('error', function(e) {
+         console.log('Error: %s', e);
+     });
+     this._socket.on('close', function(e) {
+         console.log('Close: %s', e);
+     });
+     this._socket.on('end', function(e) {
+         console.log('End: %s', e);
+     });
+     return this._socket;
+ };
+
+
+
+ /**
+  *
   * Creates a socket client tls
   *
-  * @param {Number} port - Port number of server tls to connect
   * @param {Function} callback - When the client has connected to server
   *
   */
  Zoquete.prototype.client = function(callback) {
-     this._socket = tls.connect(this.options, function() {
-         if (typeof callback === 'function') {
-             callback();
-         }
-     });
-     this._socket.setEncoding('utf8');
-     this._wrapondata();
-     this._socket.on('error', function(e) {
-         console.log('on error');
-         console.log(e);
-     });
+     var self = this,
+         socket = tls.connect(this.options, function() {
+             self.isClient = true;
+             if (typeof callback === 'function') {
+                 callback();
+             }
+         });
+     this._resetSocket(socket);
      process.stdin.pipe(this._socket);
      process.stdin.resume();
      return this;
@@ -92,21 +114,22 @@
   *
   * @param {String} ev - Event name
   * @param {Object} data - JSON data to send
-  * @param {Object} query - Only for get
-  * @param {Function} callback - After (always) socket write
+  *
+  * @returns {Promise}
   *
   */
  Zoquete.prototype.send = function(ev, data) {
      var self = this,
          req = this._parser(ev, data);
-
      if (req) {
          this._socket.write(req);
          return new Promise(function(resolve, reject) {
              self.once(ev + ':done', function(data) {
+                 self.removeAllListeners(ev + ':fail');
                  resolve(data);
              });
-             self.once(ev + ':fail', function() {
+             self.once(ev + ':fail', function(data) {
+                 self.removeAllListeners(ev + ':done');
                  reject(data);
              });
          });
@@ -122,7 +145,7 @@
   */
  Zoquete.prototype._wrapondata = function() {
      var self = this;
-    self._socket.on('data', function(data) {
+     self._socket.on('data', function(data) {
          self._reverse(data);
      });
  };
@@ -169,6 +192,7 @@
              this.emit(obj.ev, obj.content);
              return true;
          } else {
+             self._socket.emit('error', ' SyntaxError:');
              return false;
          }
      } catch (e) {
@@ -176,6 +200,21 @@
          return false;
      }
 
+ };
+
+
+ /*
+  *
+  * Close connection
+  *
+  * @returns {Boolen}
+  *
+  */
+ Zoquete.prototype.close = function() {
+     if (this.isServer) {
+         this._socket.end();
+     }
+     return;
  };
 
 
