@@ -164,13 +164,10 @@
   *
   */
  Zoquete.prototype._parser = function(ev, data) {
-     if (typeof ev === 'string' && typeof data === 'object') {
-         return JSON.stringify({
-             ev: ev,
-             content: data,
-         });
-     }
-     return false;
+     return JSON.stringify({
+         ev: ev,
+         content: data
+     });
  };
 
 
@@ -185,21 +182,12 @@
   *
   */
  Zoquete.prototype._reverse = function(obj) {
-     var self = this;
      try {
-         obj = JSON.parse(obj);
-         if (obj.ev && obj.content) {
-             this.emit(obj.ev, obj.content);
-             return true;
-         } else {
-             self._socket.emit('error', ' SyntaxError:');
-             return false;
-         }
+        obj = JSON.parse(obj);
+        this.emit(obj.ev, obj.content);
      } catch (e) {
-         self._socket.emit('error', e);
-         return false;
+        this._socket.emit('error', e);
      }
-
  };
 
 
