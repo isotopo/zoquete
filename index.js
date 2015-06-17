@@ -144,10 +144,16 @@
   *
   */
  Zoquete.prototype._wrapondata = function() {
-     var self = this;
-     self._socket.on('data', function(data) {
-         self._reverse(data);
-     });
+    var self = this;
+    var received = '';
+    self._socket.on('data', function(data) {
+      received += data;
+
+      if (Buffer.byteLength(data, 'utf8') < 1024) {
+        self._reverse(received);
+        received = '';
+      }
+    });
  };
 
 
