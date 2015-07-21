@@ -1,0 +1,191 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Zoquete by 4yopping</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-dark.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Zoquete</h1>
+        <p>Zoquete is a library that wraps a socket connection with TLS</p>
+        <p class="view"><a href="https://github.com/4yopping/zoquete">View the Project on GitHub <small>4yopping/zoquete</small></a></p>
+        <ul>
+          <li><a href="https://github.com/4yopping/zoquete/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/4yopping/zoquete/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/4yopping/zoquete">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="zoquete" class="anchor" href="#zoquete" aria-hidden="true"><span class="octicon octicon-link"></span></a>Zoquete</h1>
+
+<p>Zoquete is a library that wraps a socket connection with tls.</p>
+
+<p><a href="https://travis-ci.org/4yopping/zoquete"><img src="https://travis-ci.org/4yopping/zoquete.svg?branch=master" alt="Build Status"></a>
+<a href="http://badge.fury.io/js/zoquete"><img src="https://badge.fury.io/js/zoquete.svg" alt="npm version"></a>
+<a href="http://inch-ci.org/github/4yopping/zoquete"><img src="http://inch-ci.org/github/4yopping/zoquete.svg?branch=master" alt="Inline docs"></a>
+<img src="./zoquete-logo.jpg" alt="Zoquete"></p>
+
+<h2>
+<a id="install" class="anchor" href="#install" aria-hidden="true"><span class="octicon octicon-link"></span></a>Install</h2>
+
+<div class="highlight highlight-shell"><pre>npm install zoquete --save</pre></div>
+
+<p>Example: Ping-pong </p>
+
+<p><strong>Server:</strong></p>
+
+<div class="highlight highlight-js"><pre>    <span class="pl-k">var</span> Zoquete <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>zoquete<span class="pl-pds">'</span></span>),
+    options <span class="pl-k">=</span> {
+        key<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>my-key.key<span class="pl-pds">'</span></span>,
+        cert<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>my-cert.cert<span class="pl-pds">'</span></span>,
+        requestCert<span class="pl-k">:</span> <span class="pl-c1">true</span>,
+        ca<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>authorized-client.cert<span class="pl-pds">'</span></span>],
+        port<span class="pl-k">:</span> <span class="pl-c1">8080</span> <span class="pl-c">// Listen port </span>
+    },
+
+    z <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Zoquete</span>(options).server(<span class="pl-k">function</span>(){
+        z.<span class="pl-c1">send</span>(<span class="pl-s"><span class="pl-pds">'</span>pong<span class="pl-pds">'</span></span>, {timestamp<span class="pl-k">:</span> <span class="pl-c1">Date</span>.now()});
+        z.on(<span class="pl-s"><span class="pl-pds">'</span>ping<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">data</span>){
+            <span class="pl-c">// data = {timestamp: "timestamp-here"}</span>
+            z.<span class="pl-c1">send</span>(<span class="pl-s"><span class="pl-pds">'</span>pong<span class="pl-pds">'</span></span>, {timestamp<span class="pl-k">:</span> <span class="pl-c1">Date</span>.now()});
+        });
+    });
+</pre></div>
+
+<p><strong>Client:</strong></p>
+
+<div class="highlight highlight-js"><pre>    <span class="pl-k">var</span> Zoquete <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>zoquete<span class="pl-pds">'</span></span>),
+    options <span class="pl-k">=</span> {
+        host<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>localhost<span class="pl-pds">'</span></span>, <span class="pl-c">// Server tls host</span>
+        port<span class="pl-k">:</span> <span class="pl-c1">8080</span> <span class="pl-c">// Server tls port </span>
+        key<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>my-key.key<span class="pl-pds">'</span></span>,
+        cert<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>my-cert.cert<span class="pl-pds">'</span></span>,
+        ca<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>authorized-server.cert<span class="pl-pds">'</span></span>],
+         <span class="pl-en">checkServerIdentity</span><span class="pl-k">:</span> <span class="pl-k">function</span>(<span class="pl-smi">host</span>, <span class="pl-smi">cert</span>) {
+            <span class="pl-c">// Avoid the server name match verification</span>
+            <span class="pl-k">return</span>;
+        }
+    },
+    z <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Zoquete</span>(options).client();
+    z.on(<span class="pl-s"><span class="pl-pds">'</span>pong<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">data</span>){
+        <span class="pl-c">// data = {timestamp: "timestamp-here"}</span>
+        z.<span class="pl-c1">send</span>(<span class="pl-s"><span class="pl-pds">'</span>ping<span class="pl-pds">'</span></span>, {timestamp<span class="pl-k">:</span> <span class="pl-c1">Date</span>.now()});
+    });</pre></div>
+
+<h1>
+<a id="custom-events" class="anchor" href="#custom-events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom Events</h1>
+
+<p>Zoquete supports custom event names, excluding reserved events names:</p>
+
+<ul>
+<li>'connection'</li>
+<li>'error'</li>
+<li>'data'</li>
+<li>'close'</li>
+</ul>
+
+<h1>
+<a id="recommended-naming" class="anchor" href="#recommended-naming" aria-hidden="true"><span class="octicon octicon-link"></span></a>Recommended naming</h1>
+
+<p>The recommended naming event is based on (Create, Read, Update, Delete).</p>
+
+<p>E.g.: </p>
+
+<ul>
+<li>Proccess and storage: 'user:create'</li>
+<li>Update a user: 'user:update'</li>
+<li>Remove a user: 'user:delete'</li>
+</ul>
+
+<p>Event names recommended to reading:</p>
+
+<ul>
+<li>Get a single user: 'user:readone'</li>
+<li>Get multiple users: 'user:read'</li>
+</ul>
+
+<h1>
+<a id="responses" class="anchor" href="#responses" aria-hidden="true"><span class="octicon octicon-link"></span></a>Responses</h1>
+
+<p>Once the client are sent the server will send the event name with his result.</p>
+
+<p>Eg: "myevent:done" - The event "myevent" was done.
+    "myevent:fail" - An error or errors on "myevent".</p>
+
+<div class="highlight highlight-js"><pre>    <span class="pl-c">// In client tls</span>
+    z.on(<span class="pl-s"><span class="pl-pds">'</span>myevent:fail<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">data</span>){
+        <span class="pl-c">// - data</span>
+    });</pre></div>
+
+<p>Alternatively send method returns a promise which is triggered when the server sends the event "done" or "fail" containing</p>
+
+<div class="highlight highlight-js"><pre>    <span class="pl-c">// In client tls</span>
+z.<span class="pl-c1">send</span>(<span class="pl-s"><span class="pl-pds">'</span>myevent<span class="pl-pds">'</span></span>, {
+        say<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>daaaah!<span class="pl-pds">'</span></span>,
+    })
+    .then(<span class="pl-k">function</span>(<span class="pl-smi">response</span>) {
+        <span class="pl-c">// - Triggered by myevent:done</span>
+    })
+    .catch(<span class="pl-k">function</span>(<span class="pl-smi">errors</span>) {
+       <span class="pl-c">// - Triggered by myevent:fail</span>
+    });</pre></div>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<div class="highlight highlight-js"><pre>    z.on(<span class="pl-s"><span class="pl-pds">'</span>myevent<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(){}); <span class="pl-c">// Good! :)</span>
+    z.on(<span class="pl-s"><span class="pl-pds">'</span>myevent:create<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(){}); <span class="pl-c">// Good! :)</span>
+    z.on(<span class="pl-s"><span class="pl-pds">'</span>data<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(){}); <span class="pl-c">// Bad! :(</span>
+    z.on(<span class="pl-s"><span class="pl-pds">'</span>error<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(){}); <span class="pl-c">// Bad! :(</span>
+
+    z.<span class="pl-c1">send</span>(<span class="pl-s"><span class="pl-pds">'</span>myevent<span class="pl-pds">'</span></span>, {}); <span class="pl-c">// Good! :)</span>
+    z.<span class="pl-c1">send</span>(<span class="pl-s"><span class="pl-pds">'</span>data<span class="pl-pds">'</span></span>, {}); <span class="pl-c">// Bad! :(</span>
+    z.<span class="pl-c1">send</span>(<span class="pl-s"><span class="pl-pds">'</span>myevent<span class="pl-pds">'</span></span>); <span class="pl-c">// Bad! :( The event sent must contain an object.</span>
+    z.<span class="pl-c1">send</span>(<span class="pl-s"><span class="pl-pds">'</span>myevent<span class="pl-pds">'</span></span>, <span class="pl-c1">false</span>); <span class="pl-c">// Bad! :( Send only support objects {}</span></pre></div>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>The MIT License (MIT)</p>
+
+<p>Copyright (c) 2015 Sergio Morlán Páramo, 4yopping and all the related trademarks</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/4yopping">4yopping</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
