@@ -5,7 +5,7 @@ Zoquete is a library that wraps a socket connection with tls.
 [![Build Status](https://travis-ci.org/4yopping/zoquete.svg?branch=master)](https://travis-ci.org/4yopping/zoquete)
 [![npm version](https://badge.fury.io/js/zoquete.svg)](http://badge.fury.io/js/zoquete)
 [![Inline docs](http://inch-ci.org/github/4yopping/zoquete.svg?branch=master)](http://inch-ci.org/github/4yopping/zoquete)
-![Zoquete](./zoquete-logo.jpg)
+![Zoquete](./zoquete-logo.png)
 
 
 ## Install
@@ -15,7 +15,7 @@ npm install zoquete --save
 ```
 
 
-Example: Ping-pong 
+Example: Ping-pong
 
 **Server:**
 
@@ -26,7 +26,7 @@ Example: Ping-pong
         cert: 'my-cert.cert',
         requestCert: true,
         ca: ['authorized-client.cert'],
-        port: 8080 // Listen port 
+        port: 8080 // Listen port
     },
 
     z = new Zoquete(options).server(function(){
@@ -45,7 +45,7 @@ Example: Ping-pong
     var Zoquete = require('zoquete'),
     options = {
         host: 'localhost', // Server tls host
-        port: 8080 // Server tls port 
+        port: 8080 // Server tls port
         key: 'my-key.key',
         cert: 'my-cert.cert',
         ca: ['authorized-server.cert'],
@@ -64,7 +64,7 @@ Example: Ping-pong
 
 
 
-# Custom Events 
+# Custom Events
 
 Zoquete supports custom event names, excluding reserved events names:
 
@@ -74,11 +74,11 @@ Zoquete supports custom event names, excluding reserved events names:
 + 'close'
 
 
-# Recommended naming 
+# Recommended naming
 
 The recommended naming event is based on (Create, Read, Update, Delete).
 
-E.g.: 
+E.g.:
 
 + Proccess and storage: 'user:create'
 + Update a user: 'user:update'
