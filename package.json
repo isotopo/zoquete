@@ -1,6 +1,6 @@
 {
   "name": "zoquete",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Zoquete is a library that wraps a socket connection with tls.",
   "main": "index.js",
   "scripts": {},
