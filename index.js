@@ -3,7 +3,11 @@
 
 var tls = require('tls'),
 	util = require('util'),
-	debug = require('debug')('zoquete'),
+	debug = {
+		info: require('debug')('zoquete:info'),
+		emit: require('debug')('zoquete:emit'),
+		on: require('debug')('zoquete:on')
+	},
 	Emitter = require('events').EventEmitter;
 
 
@@ -61,15 +65,15 @@ Zoquete.prototype.server = function(callback) {
 		self.removeAllListeners();
 		self._resetSocket(socket);
 		self._socket.pipe(self._socket);
-		debug('Client: %s with host: %s connected', client.displayName, client.host);
 		if (typeof callback === 'function') {
-			callback();
+			callback(self._socket);
 		}
+		debug.info('Client: %s with host: %s connected', client.displayName, client.host);
 	});
 	this.server.listen(this.socketOptions.port, function() {
-		debug('Socket server listening at %s', self.socketOptions.port);
+		debug.info('Socket server listening at %s', self.socketOptions.port);
 	});
-	return this;
+	return this.server;
 };
 
 
@@ -128,7 +132,7 @@ Zoquete.prototype._resetSocket = function(socket) {
 
 
 	this._socket.on('error', function(e) {
-		debug('On error: %s', e);
+		debug.on('On error: %s', e);
 	});
 
 
@@ -141,13 +145,13 @@ Zoquete.prototype._resetSocket = function(socket) {
 				self.client(self.clientCallback);
 			}, self.options.reconnect);
 		}
-		debug('On close: %s', e);
+		debug.on('On close: %s', e);
 	});
 
 	// This event triggers on the server when it is off
 	//
 	this._socket.on('end', function(e) {
-		debug('On end: %s', e);
+		debug.on('On end: %s', e);
 	});
 
 	return this._socket;
@@ -163,7 +167,6 @@ Zoquete.prototype._resetSocket = function(socket) {
  * @description
  *      Creates a socket client tls
  * @param {Function} callback - When the client has connected to server
-
  */
 Zoquete.prototype.client = function(callback) {
 	var self = this,
@@ -171,14 +174,14 @@ Zoquete.prototype.client = function(callback) {
 
 	this.isClient = true;
 
-	debug('socket client has created');
+	debug.info('socket client has created');
 
 	socket = tls.connect(this.socketOptions, function() {
 
-		debug('socket client succesfully connect to: %s, port: %s',
+		debug.info('socket client succesfully connect to: %s, port: %s',
 			self.socketOptions.host, self.socketOptions.port);
 
-		debug('The client authorized', socket.authorized);
+		debug.info('The client authorized', socket.authorized);
 
 		if (typeof callback === 'function') {
 			self.clientCallback = callback;
@@ -238,12 +241,14 @@ Zoquete.prototype._wrapondata = function() {
 	var received = '';
 	self._socket.on('data', function(data) {
 		received += data;
-		if (Buffer.byteLength(data, 'utf8') < 1024) {
-			self._reverse(received);
-			received = '';
-		}
+			if (Buffer.byteLength(data, 'utf8') < 1024) {
+				self._reverse(received);
+				received = '';
+			}
 	});
 };
+
+
 
 
 
@@ -281,6 +286,7 @@ Zoquete.prototype._reverse = function(obj) {
 	try {
 		obj = JSON.parse(obj);
 		this.emit(obj.ev, obj.content);
+		debug.emit('Emit event: %s, with content: %s', obj.ev, obj.content);
 	} catch (e) {
 		this._socket.emit('error', e);
 	}

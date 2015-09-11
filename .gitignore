@@ -1,3 +1,7 @@
+# zoqute
+
+test/keys
+
 # Created by https://www.gitignore.io
 
 ### Node ###
@@ -167,4 +171,3 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
-

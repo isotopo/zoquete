@@ -3,7 +3,9 @@
   "version": "0.0.4",
   "description": "Zoquete is a library that wraps a socket connection with tls.",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha test/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/4yopping/zoquete"
@@ -21,5 +23,11 @@
   "bugs": {
     "url": "https://github.com/4yopping/zoquete/issues"
   },
-  "homepage": "https://github.com/4yopping/zoquete"
+  "homepage": "https://github.com/4yopping/zoquete",
+  "dependencies": {
+    "debug": "^2.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.2"
+  }
 }
