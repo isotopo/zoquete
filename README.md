@@ -62,6 +62,11 @@ Example: Ping-pong
 ```
 
 
+## Test
+
+```shell
+npm test
+```
 
 
 # Custom Events
@@ -74,9 +79,9 @@ Zoquete supports custom event names, excluding reserved events names:
 + 'close'
 
 
-# Recommended naming
+# Conventions
 
-The recommended naming event is based on (Create, Read, Update, Delete).
+Naming conventions: use the object name and ":" to separate events based on (Create, Read, Update, Delete).
 
 E.g.:
 
@@ -84,10 +89,11 @@ E.g.:
 + Update a user: 'user:update'
 + Remove a user: 'user:delete'
 
-Event names recommended to reading:
+Event conventions to reading:
 
 + Get a single user: 'user:readone'
 + Get multiple users: 'user:read'
+
 
 
 # Responses
