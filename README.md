@@ -102,6 +102,8 @@ Once the client are sent the server will send the event name with his result.
 
 Eg: "myevent:done" - The event "myevent" was done.
     "myevent:fail" - An error or errors on "myevent".
+    "myobject:myevent:done" - The event "myevent" of "myobject" was done.
+    "myobject:myevent:fail" - An error or errors on "myevent" of "myobject".
 
 
 
