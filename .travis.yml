@@ -2,5 +2,7 @@ language: node_js
 script:
   - cd test/
   - sh generate-keys.sh
+  - cd ..
+  - npm test
 node_js:
   - "0.12"
